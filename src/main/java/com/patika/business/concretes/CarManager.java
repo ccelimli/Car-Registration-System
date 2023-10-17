@@ -2,17 +2,16 @@ package com.patika.business.concretes;
 
 import com.patika.business.abstracts.CarService;
 import com.patika.business.request.AddCarRequest;
+import com.patika.business.request.UpdateCarRequest;
 import com.patika.business.response.GetCarResponse;
 import com.patika.dataAccess.CarRepository;
 import com.patika.entities.Car;
-import com.patika.utilities.mappers.ModelMapperManager;
 import com.patika.utilities.mappers.ModelMapperService;
-import com.patika.utilities.results.DataResult;
-import com.patika.utilities.results.ErrorDataResult;
-import com.patika.utilities.results.Result;
-import com.patika.utilities.results.SuccessDataResult;
+import com.patika.utilities.results.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CarManager implements CarService {
@@ -40,22 +39,56 @@ public class CarManager implements CarService {
     }
 
     @Override
-    public Result delete(Car car) {
-        return null;
+    public Result delete(int id) {
+        try {
+            this._carRepository.deleteById(id);
+            return new SuccessResult("Success");
+        }catch (Exception error){
+            return new ErrorResult(error.getMessage());
+        }
     }
 
     @Override
-    public DataResult<Car> update(Car car) {
-        return null;
+    public DataResult<Car> update(UpdateCarRequest updateCarRequest) {
+        try{
+            Car car= this._modelMapperService.forRequest().map(updateCarRequest, Car.class);
+            this._carRepository.save(car);
+            return new SuccessDataResult<>(car,"Success");
+        }catch (Exception error){
+            return new ErrorDataResult<>(error.getMessage());
+        }
     }
 
     @Override
-    public DataResult<Car> getAll(Car car) {
-        return null;
+    public DataResult<List<GetCarResponse>> getAll() {
+        try{
+            List<Car> carList= this._carRepository.findAll();
+            List<GetCarResponse> getCarResponseList=carList.stream().map(car -> this._modelMapperService.forResponse().map(car,GetCarResponse.class)).toList();
+            return new SuccessDataResult<>(getCarResponseList,"Success");
+        }catch(Exception error){
+            return new ErrorDataResult<>(error.getMessage());
+        }
     }
 
     @Override
-    public DataResult<Car> getCarByUserId(Car car) {
-        return null;
+    public DataResult<List<GetCarResponse>> getCarByUserId(int id) {
+        try{
+            List<Car> carList= this._carRepository.getCarByUserId(id);
+            List<GetCarResponse> getCarResponseList= carList.stream().map(car -> this._modelMapperService.forResponse().map(car,GetCarResponse.class)).toList();
+            return new SuccessDataResult<>(getCarResponseList,"Success");
+        }catch (Exception error){
+            return new ErrorDataResult<>(error.getMessage());
+        }
+    }
+
+    @Override
+    public DataResult<GetCarResponse> getCarById(int id) {
+        try{
+            Car car=this._carRepository.findById(id).orElseThrow();
+            GetCarResponse getCarResponse= this._modelMapperService.forResponse().map(car, GetCarResponse.class);
+            return new SuccessDataResult<>(getCarResponse,"Success");
+        }catch (Exception error){
+            return new ErrorDataResult<>(error.getMessage());
+        }
     }
 }

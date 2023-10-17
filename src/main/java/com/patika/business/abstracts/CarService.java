@@ -1,14 +1,19 @@
 package com.patika.business.abstracts;
 
 import com.patika.business.request.AddCarRequest;
+import com.patika.business.request.UpdateCarRequest;
+import com.patika.business.response.GetCarResponse;
 import com.patika.entities.Car;
 import com.patika.utilities.results.DataResult;
 import com.patika.utilities.results.Result;
 
+import java.util.List;
+
 public interface CarService {
-    public DataResult<AddCarRequest> add(AddCarRequest addCarRequest);
-    public Result delete(Car car);
-    public DataResult<Car> update(Car car);
-    public DataResult<Car> getAll(Car car);
-    public DataResult<Car> getCarByUserId(Car car);
+     DataResult<AddCarRequest> add(AddCarRequest addCarRequest);
+     Result delete(int id);
+     DataResult<Car> update(UpdateCarRequest updateCarRequest);
+     DataResult<List<GetCarResponse>> getAll();
+     DataResult<List<GetCarResponse>> getCarByUserId(int id);
+     DataResult<GetCarResponse> getCarById(int id);
 }

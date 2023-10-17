@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddCarRequest {
+public class UpdateCarRequest {
+    private int id;
     private String name;
     private String plaque;
     private String model;
     private String brand;
     private int year;
+
     private int userId;
 }
