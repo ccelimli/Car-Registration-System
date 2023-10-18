@@ -33,6 +33,6 @@ public class Car {
     private int year;
 
     @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
+    @JoinColumn(name = "user_id",nullable = false, foreignKey = @ForeignKey(name="FK_CARS_USERS"))
     private User user;
 }
