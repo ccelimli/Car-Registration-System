@@ -1,9 +1,23 @@
 package com.patika.dataAccess;
 
+import com.patika.entities.Car;
 import com.patika.entities.User;
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UserRepository extends JpaRepository<User,Integer> {
+    @Query("SELECT u FROM User u WHERE u.username=:username")
+    User getByUsername(@Param("username") String username);
+
+    @Modifying
+    @Transactional
+    @Query("DELETE FROM Car WHERE Car.user.id=:id ")
+    int deleteCarByUserId(@Param("id") int id);
 }
