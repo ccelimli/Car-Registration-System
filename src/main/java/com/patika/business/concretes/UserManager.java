@@ -39,12 +39,8 @@ public class UserManager implements UserService {
     @Override
     public Result delete(int id) {
         try {
-            if (this._userRepository.deleteCarByUserId(id)>0){
                 this._userRepository.deleteById(id);
                 return new SuccessResult("Success");
-            }else{
-                return new ErrorResult("Bir hata oluştu");
-            }
         } catch (Exception error) {
             return new ErrorResult(error.getMessage());
         }
